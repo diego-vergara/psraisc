@@ -3,14 +3,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
+using System.Threading.Tasks;
 
-namespace Persistence
+namespace Repository.Core
 {
-    public class Repository<T> : IRepository<T> where T : class
+    public class Repository<T> : IRepository<T>, IRepositoryAsync<T> where T : class
     {
-        private readonly DbContext Context;
-        private readonly DbSet<T> Entities;
+        protected readonly DbContext Context;
+        protected readonly DbSet<T> Entities;
 
         public Repository(DbContext context)
         {
@@ -56,6 +56,11 @@ namespace Persistence
         public IEnumerable<T> GetAll()
         {
             return Entities.ToList();
+        }
+
+        public Task<List<T>> GetAllAsync()
+        {
+            return Entities.ToListAsync();
         }
 
         public IEnumerable<T> GetList(int pageIndex, int pageSize)

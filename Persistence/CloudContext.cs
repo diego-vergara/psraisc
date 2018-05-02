@@ -1,13 +1,16 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Model.Domain;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace Persistence
 {
-    public class CloudContext : DbContext
+    public class DbConext : DbContext
     {
-        public CloudContext(DbContextOptions<CloudContext> options)
+        public DbSet<Fondo> Fondo { get; set; }        
+
+        public DbConext(DbContextOptions<DbConext> options)
            : base(options)
         {
 
