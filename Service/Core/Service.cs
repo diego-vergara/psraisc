@@ -24,9 +24,20 @@ namespace Service
             Entity.Add(entity);
         }
 
+        public void AddAsync(T entity)
+        {
+            Entity.AddAsync(entity);
+        }
+
         public void AddRange(IEnumerable<T> entity)
         {
             Entity.AddRange(entity);
+        }
+
+        public void AddRangeAsync(IEnumerable<T> entities)
+        {
+            Entity.AddRangeAsync(entities);
+            
         }
 
         public int Commit()
@@ -34,7 +45,7 @@ namespace Service
             return Context.SaveChanges();
         }
 
-        public Task<int> CommitAysnc()
+        public Task<int> CommitAsync()
         {
             return Context.SaveChangesAsync();
         }
@@ -43,6 +54,7 @@ namespace Service
         {
             Entity.Remove(entity);
         }
+
 
         public void DeleteRange(IEnumerable<T> entity)
         {
@@ -85,6 +97,14 @@ namespace Service
                 .Skip((pageIndex - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
+        }
+
+        public Task<List<T>> GetListAsync(int pageIndex, int pageSize)
+        {
+            return Entity
+                .Skip((pageIndex - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
         }
     }
 }

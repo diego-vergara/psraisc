@@ -31,7 +31,6 @@ namespace API.Controllers
         public async Task<IActionResult> Get(long id)
         {
             var fondo = await FondoService.GetAsync(id);
-            
             if(fondo == null)
             {
                 return NotFound(new
@@ -44,5 +43,20 @@ namespace API.Controllers
             return Ok(fondo);
         }
 
+        //[HttpGet("codigo/{codigo}")]
+        //public async Task<IActionResult> GetByCodigo(string codigo)
+        //{
+        //    var fondo = await FondoService.FindByCodigoAsync(codigo);
+        //    if (fondo == null)
+        //    {
+        //        return NotFound(new
+        //        {
+        //            Code = 1203,
+        //            Error = "No se encontro el fondo solicitado"
+        //        });
+        //    }
+
+        //    return Ok(fondo);
+        //}
     }
 }

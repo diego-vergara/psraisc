@@ -15,5 +15,13 @@ namespace Service
             : base(context)
         {
         }
+
+        public Task<Fondo> FindByCodigoAsync(string codigo)
+        {
+            return
+                Entity
+                    .Where(e => e.Codigo == codigo)
+                    .SingleOrDefaultAsync();
+        }
     }
 }

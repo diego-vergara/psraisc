@@ -11,15 +11,11 @@ namespace Service.Core
         IEnumerable<T> GetAll();
         IEnumerable<T> GetList(int pageIndex, int pageSize);
         IEnumerable<T> Find(Expression<Func<T, bool>> predicate);
-       
         void Add(T entity);
         void AddRange(IEnumerable<T> entities);
-
         void Delete(T entity);
         void DeleteRange(IEnumerable<T> entities);
-
         void Edit(T entity);
-
         int Commit();
     }
 }
