@@ -17,6 +17,6 @@ namespace Service.Core
         //void DeleteAsync(T entity);
         //void DeleteRangeAsync(IEnumerable<T> entities);
         //void EditAsync(T entity);
-        Task<int> CommitAsync();
+        Task<bool> CommitAsync();
     }
 }

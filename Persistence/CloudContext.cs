@@ -6,11 +6,13 @@ using System.Text;
 
 namespace Persistence
 {
-    public class DbConext : DbContext
+    public class CloudContext : DbContext
     {
-        public DbSet<Fondo> Fondo { get; set; }        
+        public DbSet<Administradora> Administradora { get; set; }
+        public DbSet<Fondo> Fondo { get; set; }
+        
 
-        public DbConext(DbContextOptions<DbConext> options)
+        public CloudContext(DbContextOptions<CloudContext> options)
            : base(options)
         {
 
@@ -18,7 +20,7 @@ namespace Persistence
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

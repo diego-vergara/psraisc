@@ -40,14 +40,29 @@ namespace Service
             
         }
 
-        public int Commit()
+        public bool Commit()
         {
-            return Context.SaveChanges();
+            try
+            {
+                return Context.SaveChanges() > 0;
+            }       
+            catch(Exception e)
+            {
+                return false;
+            }
         }
 
-        public Task<int> CommitAsync()
+        public async Task<bool> CommitAsync()
         {
-            return Context.SaveChangesAsync();
+            try
+            {
+                var result = await Context.SaveChangesAsync();
+                return (result > 0);
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
         }
 
         public void Delete(T entity)

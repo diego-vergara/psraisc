@@ -6,6 +6,7 @@ using Microsoft.ApplicationInsights.Extensibility.Implementation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Model.Domain;
 using Service;
 
 namespace API.Controllers
@@ -35,12 +36,40 @@ namespace API.Controllers
             {
                 return NotFound(new
                 {
-                    Code = 1203,
+                    Code = 1,
                     Error = "No se encontro el fondo solicitado"
                 });
             }
 
             return Ok(fondo);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody]Fondo fondo)
+        {
+            if(!ModelState.IsValid)
+            {
+                return NotFound(new
+                {
+                    Code = 0,
+                    Error = "Los datos ingresados son incorrectos"
+                });
+            }
+
+            FondoService.AddAsync(fondo);
+            var result = await FondoService.CommitAsync();
+
+            if(result == false)
+            {
+                return NotFound(new
+                {
+                    Code = 0,
+                    Error = "Ocurrio un error al grabar los datos ingresados"
+                });
+            }
+
+            return Ok(fondo);
+
         }
 
         //[HttpGet("codigo/{codigo}")]

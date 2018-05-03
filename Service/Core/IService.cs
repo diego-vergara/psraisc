@@ -16,6 +16,6 @@ namespace Service.Core
         void Delete(T entity);
         void DeleteRange(IEnumerable<T> entities);
         void Edit(T entity);
-        int Commit();
+        bool Commit();
     }
 }
