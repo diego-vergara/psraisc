@@ -18,7 +18,7 @@ namespace Service
         {
             return
                 Entity
-                    .Include(e => e.Fondo)
+                    .Include(e => e.Fondos)
                     .ToListAsync();
         }
 

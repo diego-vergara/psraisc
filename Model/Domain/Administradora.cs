@@ -18,6 +18,6 @@ namespace Model.Domain
         [MaxLength(1)]
         public string Dv { get; set; }
 
-        public ICollection<Fondo> Fondo { get; set; }
+        public ICollection<Fondo> Fondos { get; set; }
     }
 }

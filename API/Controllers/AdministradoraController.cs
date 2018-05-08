@@ -22,13 +22,13 @@ namespace API.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await AdministradoraService.GetWithFondos());
+            return Ok(await AdministradoraService.GetAllAsync( e => e.Fondos ));
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(long id)
         {
-            var administradora = await AdministradoraService.GetAsync(id);
+            var administradora = AdministradoraService.Get(id);
             if (administradora == null)
             {
                 return NotFound(new

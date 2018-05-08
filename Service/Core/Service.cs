@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Model.Response;
 using Service.Core;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace Service
     public class Service<T> : IService<T>, IServiceAsync<T> where T : class
     {
         protected readonly DbContext Context;
-        protected readonly DbSet<T> Entity;
+        public readonly DbSet<T> Entity ;
 
         public Service(DbContext context)
         {
@@ -91,35 +92,107 @@ namespace Service
             return Entity.Find(id);
         }
 
-        public IEnumerable<T> GetAll()
+        public IEnumerable<T> GetAll(params Expression<Func<T, object>>[] includeProperties)
         {
-            return Entity.ToList();
+            if (includeProperties == null || includeProperties.Length == 0)
+            {
+                return Entity.ToList();
+            }
+
+            return this
+                    .IncludeMultiple(includeProperties)
+                    .ToList();
         }
 
-        public Task<List<T>> GetAllAsync()
+        public Task<List<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties)
         {
-            return Entity.ToListAsync();
+            if (includeProperties == null || includeProperties.Length == 0)
+            {
+                return Entity.ToListAsync();
+            }
+
+            return this
+                    .IncludeMultiple(includeProperties)
+                    .ToListAsync();
         }
 
         public Task<T> GetAsync(object id)
         {
-            return Entity.FindAsync(id);
+            return Entity
+                    .FindAsync(id);
         }
 
-        public IEnumerable<T> GetList(int pageIndex, int pageSize)
+        public PageListResponse<T> GetList(int pageIndex, int pageSize)
         {
-            return Entity
-                .Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
+            var totalPages = Entity.Count() / pageSize;
+            if (pageIndex <= 0 || pageIndex > totalPages)
+            {
+                pageIndex = 1;
+            }
+            
+
+            var pageList = new PageListResponse<T>();
+            pageList.PageIndex = pageIndex;
+            pageList.PageSize = pageSize;
+            pageList.TotalPages = totalPages;
+            pageList.Data = Entity
+                                .Skip((pageIndex - 1) * pageSize)
+                                .Take(pageSize)
+                                .ToList();
+
+            pageList.HasNext = pageIndex < pageList.TotalPages;
+            //pageList.HasPrev = 
+            return pageList;
         }
 
         public Task<List<T>> GetListAsync(int pageIndex, int pageSize)
         {
+            if (pageIndex <= 0)
+            {
+                pageIndex = 1;
+            }
+
             return Entity
-                .Skip((pageIndex - 1) * pageSize)
-                .Take(pageSize)
-                .ToListAsync();
+                    .Skip((pageIndex - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToListAsync();
+        }
+
+        public T Get(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includeProperties)
+        {
+            if(includeProperties == null || includeProperties.Length == 0)
+            {
+                return Entity
+                        .SingleOrDefault(where);
+                        
+            }
+            return this
+                    .IncludeMultiple(includeProperties)
+                    .SingleOrDefault(where);
+        }
+
+
+        public Task<T> GetAsync(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includeProperties)
+        {
+            if (includeProperties == null || includeProperties.Length == 0)
+            {
+                return Entity
+                        .SingleOrDefaultAsync(where);
+
+            }
+            return this
+                    .IncludeMultiple(includeProperties)
+                    .SingleOrDefaultAsync(where);
+        }
+
+        protected IQueryable<T> IncludeMultiple(params Expression<Func<T, object>>[] includeProperties)
+        {
+            var query = Entity.AsQueryable();
+            foreach (var include in includeProperties)
+            {
+                query = query.Include(include);
+            }
+            return query;
         }
     }
 }

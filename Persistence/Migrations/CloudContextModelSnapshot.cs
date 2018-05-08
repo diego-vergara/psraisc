@@ -62,7 +62,7 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Model.Domain.Fondo", b =>
                 {
                     b.HasOne("Model.Domain.Administradora")
-                        .WithMany("Fondo")
+                        .WithMany("Fondos")
                         .HasForeignKey("AdministradoraId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

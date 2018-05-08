@@ -27,6 +27,12 @@ namespace API.Controllers
         {
             return Ok(await FondoService.GetAllAsync());
         }
+        [HttpGet("list")]
+        public async Task<IActionResult> GetPageList(int pageIndex = 1, int pageSize = 10)
+        {
+
+            return Ok(FondoService.GetList(pageIndex, pageSize));
+        }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(long id)

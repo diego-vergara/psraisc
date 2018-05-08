@@ -8,8 +8,9 @@ namespace Service.Core
 {
     public interface IServiceAsync<T> where T : class
     {
-        Task< T > GetAsync(object id);
-        Task< List<T> > GetAllAsync();
+        Task<T> GetAsync(object id);
+        Task<T> GetAsync(Expression<Func<T, bool>> where, params Expression<Func<T, object>>[] includeProperties);
+        Task<List<T>> GetAllAsync(params Expression<Func<T, object>>[] includeProperties);
         Task<List<T>> GetListAsync(int pageIndex, int pageSize);
         //IEnumerable<T> FindAsync(Expression<Func<T, bool>> predicate);
         void AddAsync(T entity);

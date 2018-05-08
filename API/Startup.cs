@@ -25,6 +25,7 @@ namespace API
         {
             services.AddDbContext<CloudContext>(
                 options => options
+                                //.UseLazyLoadingProxies()
                                 .UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
 
@@ -44,6 +45,11 @@ namespace API
                 settings.GeneratorSettings.DefaultPropertyNameHandling = PropertyNameHandling.CamelCase;
             });
             // End 
+
+            app.UseCors(builder =>
+                builder
+                    .AllowAnyOrigin()
+            );
 
             if (env.IsDevelopment())
             {

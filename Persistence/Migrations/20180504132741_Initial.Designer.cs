@@ -11,7 +11,7 @@ using System;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(CloudContext))]
-    [Migration("20180503184801_Initial")]
+    [Migration("20180504132741_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -63,7 +63,7 @@ namespace Persistence.Migrations
             modelBuilder.Entity("Model.Domain.Fondo", b =>
                 {
                     b.HasOne("Model.Domain.Administradora")
-                        .WithMany("Fondo")
+                        .WithMany("Fondos")
                         .HasForeignKey("AdministradoraId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
